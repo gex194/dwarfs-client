@@ -18,7 +18,7 @@ func _process(delta: float) -> void:
 				SignalBus.update_grid_data.emit(parsedResult["data"])
 			if (parsedResult["type"] == "updateDwarfs"):
 				SignalBus.update_dwarfs_data.emit(parsedResult["data"])
-			print("Got data from server: ", parsedResult)
+			#print("Got data from server: ", parsedResult)
 	
 	elif state == WebSocketPeer.STATE_CLOSING:
 		pass

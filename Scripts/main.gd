@@ -8,10 +8,11 @@ var Gnome = preload("res://Scenes/gnome.tscn")
 
 # Atlas tiles cords
 var dirt_cell_cords: Vector2 = Vector2(1, 14)
+var grass_cell_cords: Vector2 = Vector2(1, 13)
 var dirt_background_cell_cords: Vector2 = Vector2(1,2)
 
-var gnome_offset: int = 8;
-var gnome_position_factor: int = 16;
+var gnome_offset: int = 4;
+var gnome_position_factor: int = 8;
 var gnomes_to_move: Array = []
 var gnomes_updated_positions: Array = []
 var grid_data: Array = [];
@@ -22,6 +23,11 @@ func _ready() -> void:
 	SignalBus.update_grid_data.connect(_on_update_grid_recieved)
 	SignalBus.update_dwarfs_data.connect(_on_update_dwarfs_recieved)
 	Socket.init_connection()
+	
+	for x in 1000:
+		terrain.set_cell(Vector2(x, -1), 1, grass_cell_cords)
+		for y in 1000:
+			terrain.set_cell(Vector2(x, y), 1, dirt_cell_cords)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -47,9 +53,9 @@ func _on_update_grid_recieved(data: Dictionary) -> void:
 
 func set_dirt_tile(cell: Dictionary) -> void:
 	if (cell["digged"]):
-		terrain.set_cell(Vector2(cell["x"], cell["y"]), 0, dirt_background_cell_cords)
+		terrain.set_cell(Vector2(cell["x"], cell["y"]), 1, dirt_background_cell_cords)
 	else:
-		terrain.set_cell(Vector2(cell["x"], cell["y"]), 0, dirt_cell_cords)
+		terrain.set_cell(Vector2(cell["x"], cell["y"]), 1, dirt_cell_cords)
 
 func generate_gnome(cell: Dictionary) -> Node2D:
 	var gnome: AnimatedSprite2D = Gnome.instantiate()
