@@ -1,0 +1,14 @@
+{
+"grid": [
+    {"x": 1, "y": 1, "digged": true, "dwarf": {"id": 1, "x": 1, "y": 2, "direction": null}},
+    {"x": 1, "y": 2, "digged": false, "dwarf": null},
+    {"x": 1, "y": 3, "digged": false, "dwarf": null},
+    {"x": 1, "y": 4, "digged": false, "dwarf": null},
+    {"x": 1, "y": 5, "digged": false, "dwarf": null},
+    {"x": 2, "y": 1, "digged": false, "dwarf": null},
+    {"x": 2, "y": 2, "digged": false, "dwarf": {"id": 2, "x": 1, "y": 1, "direction": "left"}},
+    {"x": 2, "y": 3, "digged": false, "dwarf": {"id": 3, "x": 2, "y": 2, "direction": "right"}},
+    {"x": 2, "y": 4, "digged": false, "dwarf": null},
+    {"x": 2, "y": 5, "digged": false, "dwarf": null}
+    ]
+}
