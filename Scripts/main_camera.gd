@@ -1,6 +1,6 @@
 extends Camera2D
 
-@export var zoom_speed: int = 5
+@export var zoom_speed: float = 0.5
 @export var max_zoom: Vector2 = Vector2(10, 10)
 
 var previous_position: Vector2 = Vector2(0,0)
@@ -16,10 +16,13 @@ func _process(delta: float) -> void:
 	handleCameraControls(delta)
 
 func handleCameraControls(delta) -> void:
+	print(zoom_speed)
 	if (Input.is_action_just_released("ZoomIn") && self.zoom < max_zoom):
-		self.zoom = lerp(self.zoom, self.zoom + Vector2(zoom_speed, zoom_speed), zoom_speed * delta)
-	if (Input.is_action_just_released("ZoomOut") && self.zoom > Vector2.ONE):
-		self.zoom = lerp(self.zoom, self.zoom - Vector2(zoom_speed, zoom_speed), zoom_speed * delta)
+		self.zoom = lerp(self.zoom, self.zoom + Vector2(zoom_speed, zoom_speed), zoom_speed + self.zoom.x * delta)
+	if (Input.is_action_just_released("ZoomOut") && self.zoom > Vector2(0.15, 0.15)):
+		self.zoom = lerp(self.zoom, self.zoom - Vector2(zoom_speed, zoom_speed), zoom_speed + self.zoom.x * delta)
+		if (self.zoom.x < 0):
+			self.zoom = Vector2(0.15, 0.15)
 
 func _unhandled_input(event: InputEvent):
 	if event is InputEventMouseButton && event.button_index == MOUSE_BUTTON_LEFT:

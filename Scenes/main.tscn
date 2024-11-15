@@ -14,6 +14,7 @@ tile_map_data = PackedByteArray("AAAQAAYAAAAFAAIAAAAQAAIAAAAMAAYAAAARAAIAAAAMAAY
 
 [node name="main_camera" type="Camera2D" parent="."]
 position = Vector2(576, 323)
+zoom = Vector2(0.15, 0.15)
 limit_smoothed = true
 position_smoothing_enabled = true
 script = ExtResource("2_lyucm")
