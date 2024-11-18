@@ -4,7 +4,7 @@ var StaticData = preload("res://Singletons/StaticData.gd")
 @onready var Socket = get_node("WebsocketManager")
 var Gnome = preload("res://Scenes/gnome.tscn")
 @onready var terrain: TileMapLayer = get_node("terain")
-@onready var main_camera = get_node("main_camera")
+@onready var main_camera: Camera2D = get_node("main_camera")
 
 # Atlas tiles cords
 var dirt_cell_cords: Vector2 = Vector2(1, 14)
@@ -23,11 +23,13 @@ func _ready() -> void:
 	SignalBus.update_grid_data.connect(_on_update_grid_recieved)
 	SignalBus.update_dwarfs_data.connect(_on_update_dwarfs_recieved)
 	Socket.init_connection()
-	
-	for x in 1000:
+	for x in 300:
 		terrain.set_cell(Vector2(x, -1), 1, grass_cell_cords)
-		for y in 1000:
+		for y in 300:
+			terrain.set_cell(Vector2(x, -y), 1, Vector2(12, 6))
 			terrain.set_cell(Vector2(x, y), 1, dirt_cell_cords)
+	main_camera.on_grid_rendered()
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -41,7 +43,7 @@ func _on_init_data_recieved(data: Array) -> void:
 		if (cell["dwarf"]):
 			#Generate a gnome and add to the scene
 			self.add_child(generate_gnome(cell))
-			
+
 func _on_update_dwarfs_recieved(data: Dictionary) -> void:
 	for dwarf in data["dwarfs"]:
 		get_value_by_id(dwarf["id"], grid_data)
@@ -50,6 +52,7 @@ func _on_update_dwarfs_recieved(data: Dictionary) -> void:
 func _on_update_grid_recieved(data: Dictionary) -> void:
 	for cell in data["cells"]:
 		set_dirt_tile(cell)
+		
 
 func set_dirt_tile(cell: Dictionary) -> void:
 	if (cell["digged"]):
@@ -112,7 +115,7 @@ func move_gnomes(delta) -> void:
 						
 					# Create and set up tween
 				var tween = create_tween()
-				tween.tween_property(current_gnome, "position", target_position, 1)
+				tween.tween_property(current_gnome, "position", target_position, 5)
 				tween.tween_callback(tween_callback.bind(
 					tween, current_gnome, target_position))
 						

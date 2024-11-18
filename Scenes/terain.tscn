@@ -193,6 +193,6 @@ sources/1 = SubResource("TileSetAtlasSource_3t4oq")
 
 [node name="terain" type="TileMapLayer"]
 tile_set = SubResource("TileSet_8hybl")
-rendering_quadrant_size = 8
+rendering_quadrant_size = 28
 collision_enabled = false
 navigation_enabled = false
