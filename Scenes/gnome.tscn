@@ -126,7 +126,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_0jwtc")
 }],
 "loop": true,
-"name": &"hit",
+"name": &"damaged",
 "speed": 5.0
 }, {
 "frames": [{
@@ -222,4 +222,4 @@ animations = [{
 [node name="gnome" type="AnimatedSprite2D"]
 scale = Vector2(0.25, 0.25)
 sprite_frames = SubResource("SpriteFrames_idos5")
-animation = &"run"
+animation = &"damaged"

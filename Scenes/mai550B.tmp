@@ -1,11 +1,10 @@
-[gd_scene load_steps=7 format=4 uid="uid://dny7gpp3gr2ix"]
+[gd_scene load_steps=6 format=4 uid="uid://dny7gpp3gr2ix"]
 
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_o6qxd"]
 [ext_resource type="Script" path="res://Scripts/main_camera.gd" id="2_lyucm"]
 [ext_resource type="PackedScene" uid="uid://b45fnm6j6cgay" path="res://Scenes/terain.tscn" id="2_uc1fd"]
 [ext_resource type="Script" path="res://Scripts/button.gd" id="4_n6sat"]
 [ext_resource type="Script" path="res://Singletons/Connection.gd" id="5_utmmc"]
-[ext_resource type="TileSet" uid="uid://cjvlmebhhiwcw" path="res://Tilesets/terain.tres" id="6_bpi6s"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_o6qxd")
@@ -18,18 +17,8 @@ editor_draw_limits = true
 script = ExtResource("2_lyucm")
 tilemaplayer = NodePath("../terain")
 
-[node name="terain" parent="." node_paths=PackedStringArray("main_camera", "terrain_dirt") instance=ExtResource("2_uc1fd")]
+[node name="terain" parent="." instance=ExtResource("2_uc1fd")]
 tile_map_data = PackedByteArray("AAAQAAYAAAAFAAIAAAAQAAIAAAAMAAYAAAARAAIAAAAMAAYAAAASAAIAAAAMAAYAAAATAAIAAAAKAAYAAAAQAAEAAAAMAAYAAAARAAEAAAALAAYAAAASAAEAAAAMAAYAAAATAAEAAAAMAAYAAAAQAAAAAAAMAAYAAAARAAAAAAAMAAYAAAASAAAAAAAMAAYAAAATAAAAAAAMAAYAAAAUAAAAAAALAAYAAAAUAAEAAAAMAAYAAAAUAAIAAAAMAAYAAAAPAAIAAAAKAAYAAAAPAAEAAAAMAAYAAAAPAAAAAAAMAAYAAAAVAAIAAAAMAAYAAAAVAAEAAAAMAAYAAAAOAAAAAAAMAAYAAAAOAAEAAAAMAAYAAAAOAAIAAAAMAAYAAAAVAAAAAAAMAAYAAAAVAAUAAAABAAIAAAA=")
-main_camera = NodePath("../main_camera")
-terrain_dirt = NodePath("../terrain_dirt")
-
-[node name="terrain_dirt" type="TileMapLayer" parent="."]
-tile_set = ExtResource("6_bpi6s")
-collision_enabled = false
-navigation_enabled = false
-
-[node name="WebsocketManager" type="Node" parent="."]
-script = ExtResource("5_utmmc")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -45,3 +34,6 @@ offset_right = 321.0
 offset_bottom = 88.0
 text = "Update"
 script = ExtResource("4_n6sat")
+
+[node name="WebsocketManager" type="Node" parent="."]
+script = ExtResource("5_utmmc")

@@ -1,8 +1,10 @@
 extends Node
 
-@export var websocket_url = "ws://127.0.0.1:8000"
+@export var websocket_url = "ws://127.0.0.1:8081"
 var socket = WebSocketPeer.new()
-@onready var main = get_node(".")
+
+func _ready() -> void:
+	init_connection()
 
 func _process(delta: float) -> void:
 	socket.poll()
@@ -12,13 +14,13 @@ func _process(delta: float) -> void:
 		while socket.get_available_packet_count():
 			var parsedResult = JSON.parse_string(socket.get_packet().get_string_from_utf8())
 			if (parsedResult["type"] == "fullGrid"):
-				print("GET TO fullGRID")
 				SignalBus.init_grid_data.emit(parsedResult["data"])
 			if (parsedResult["type"] == "updateCells"):
 				SignalBus.update_grid_data.emit(parsedResult["data"])
 			if (parsedResult["type"] == "updateDwarfs"):
 				SignalBus.update_dwarfs_data.emit(parsedResult["data"])
-			#print("Got data from server: ", parsedResult)
+				print(parsedResult)
+				
 	
 	elif state == WebSocketPeer.STATE_CLOSING:
 		pass
@@ -30,6 +32,9 @@ func _process(delta: float) -> void:
 		var code = socket.get_close_code()
 		print("WebSocket closed with code: %d. Clean: %s" % [code, code != -1])
 		set_process(false) # Stop processing.
+
+func _exit_tree() -> void:
+	socket.close()
 
 func init_connection() -> void:
 	var err = socket.connect_to_url(websocket_url)

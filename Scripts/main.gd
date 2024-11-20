@@ -10,55 +10,46 @@ var Gnome = preload("res://Scenes/gnome.tscn")
 var dirt_cell_cords: Vector2 = Vector2(1, 14)
 var grass_cell_cords: Vector2 = Vector2(1, 13)
 var dirt_background_cell_cords: Vector2 = Vector2(1,2)
+var gold_cell_cords: Vector2 = Vector2(14, 4)
+var rock_cell_cords: Vector2 = Vector2(14, 3)
 
 var gnome_offset: int = 4;
 var gnome_position_factor: int = 8;
 var gnomes_to_move: Array = []
 var gnomes_updated_positions: Array = []
 var grid_data: Array = [];
+var updated_positions_dict = {}
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	SignalBus.init_grid_data.connect(_on_init_data_recieved)
-	SignalBus.update_grid_data.connect(_on_update_grid_recieved)
 	SignalBus.update_dwarfs_data.connect(_on_update_dwarfs_recieved)
-	Socket.init_connection()
-	for x in 300:
-		terrain.set_cell(Vector2(x, -1), 1, grass_cell_cords)
-		for y in 300:
-			terrain.set_cell(Vector2(x, -y), 1, Vector2(12, 6))
-			terrain.set_cell(Vector2(x, y), 1, dirt_cell_cords)
-	main_camera.on_grid_rendered()
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	move_gnomes(delta)
+	#await Socket.init_connection()
 
 func _on_init_data_recieved(data: Array) -> void:
 	grid_data = data;
 	for cell in data:
 		#Set tile type on TileMapGrid
 		set_dirt_tile(cell)
-		if (cell["dwarf"]):
+		if (cell.has("dwarf") && cell["dwarf"]):
 			#Generate a gnome and add to the scene
 			self.add_child(generate_gnome(cell))
 
 func _on_update_dwarfs_recieved(data: Dictionary) -> void:
 	for dwarf in data["dwarfs"]:
 		get_value_by_id(dwarf["id"], grid_data)
-		gnomes_updated_positions.push_front(dwarf)
-
-func _on_update_grid_recieved(data: Dictionary) -> void:
-	for cell in data["cells"]:
-		set_dirt_tile(cell)
-		
+		gnomes_updated_positions.push_back(dwarf)
+	move_gnomes()
 
 func set_dirt_tile(cell: Dictionary) -> void:
-	if (cell["digged"]):
-		terrain.set_cell(Vector2(cell["x"], cell["y"]), 1, dirt_background_cell_cords)
-	else:
-		terrain.set_cell(Vector2(cell["x"], cell["y"]), 1, dirt_cell_cords)
+	match (cell["type"]):
+		CellType.EMPTY:
+			terrain.set_cell(Vector2(cell["x"], cell["y"]), 1, dirt_background_cell_cords)
+		CellType.ROCK:
+			terrain.set_cell(Vector2(cell["x"], cell["y"]), 1, dirt_background_cell_cords)
+		CellType.TREASURE:
+			terrain.set_cell(Vector2(cell["x"], cell["y"]), 1, gold_cell_cords)
 
 func generate_gnome(cell: Dictionary) -> Node2D:
 	var gnome: AnimatedSprite2D = Gnome.instantiate()
@@ -83,13 +74,11 @@ func get_value_by_id(target_id: String, data: Array):
 	for cell in data:
 		if (cell["dwarf"]):
 			if (cell["dwarf"]["id"] == target_id):
-				gnomes_to_move.push_front(cell["dwarf"])
-		
+				gnomes_to_move.push_back(cell["dwarf"])
 
-func move_gnomes(delta) -> void:
+func move_gnomes() -> void:
 	if (gnomes_to_move.size() > 0 and gnomes_updated_positions.size() > 0):
 		# Create dictionary for quick lookups of updated positions by ID
-		var updated_positions_dict = {}
 		for updated in gnomes_updated_positions:
 			updated_positions_dict[updated["id"]] = updated
 			
@@ -99,15 +88,25 @@ func move_gnomes(delta) -> void:
 			if updated_dictionary_value:
 				var current_gnome = get_node(str(original["id"]))
 				current_gnome.stop();
-				current_gnome.play("walk")  # Play walk animation
+				#current_gnome.play("walk")  # Play walk animation
 				match(updated_dictionary_value["direction"]):
 					"W":
-						current_gnome.animation = "walk"
+						#current_gnome.animation = "walk"
 						current_gnome.flip_h = true
 					"E":
 						current_gnome.flip_h = false
 					_:
 						current_gnome.flip_h = false
+				match(updated_dictionary_value["action"]):
+					GnomeActionType.DIG:
+						current_gnome.animation = GnomeAnimationType.HIT
+					GnomeActionType.MOVE:
+						current_gnome.animation = GnomeAnimationType.WALK
+					GnomeActionType.HOLD_TREASURE:
+						current_gnome.animation = GnomeAnimationType.TREASURE
+					_:
+						current_gnome.animation = GnomeAnimationType.IDLE
+				current_gnome.play()
 				# Precompute target position
 				var target_position = Vector2(
 					updated_dictionary_value["x"] * gnome_position_factor + gnome_offset,
@@ -115,7 +114,7 @@ func move_gnomes(delta) -> void:
 						
 					# Create and set up tween
 				var tween = create_tween()
-				tween.tween_property(current_gnome, "position", target_position, 5)
+				tween.tween_property(current_gnome, "position", target_position, 2)
 				tween.tween_callback(tween_callback.bind(
 					tween, current_gnome, target_position))
 						
@@ -126,4 +125,3 @@ func move_gnomes(delta) -> void:
 func tween_callback(tween: Tween, current_gnome: AnimatedSprite2D, target_position: Vector2) -> void:
 	current_gnome.position = target_position  # Set final position to target
 	tween.kill()  # Stop and remove tween
-	current_gnome.play("idle")  # Play idle animation

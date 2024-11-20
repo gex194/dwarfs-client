@@ -19,10 +19,9 @@ config/icon="res://icon.svg"
 
 SignalBus="*res://Singletons/SignalBus.gd"
 StaticData="res://Singletons/StaticData.gd"
-
-[display]
-
-window/stretch/mode="viewport"
+CellType="*res://Types/CellType.gd"
+GnomeAnimationType="*res://Types/GnomeAnimationType.gd"
+GnomeActionType="*res://Types/GnomeActionType.gd"
 
 [input]
 
