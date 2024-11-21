@@ -1,6 +1,6 @@
 extends Node
 
-@export var websocket_url = "ws://127.0.0.1:8081"
+@export var websocket_url = "ws://127.0.0.1:8000"
 var socket = WebSocketPeer.new()
 
 func _ready() -> void:
@@ -19,8 +19,8 @@ func _process(delta: float) -> void:
 				SignalBus.update_grid_data.emit(parsedResult["data"])
 			if (parsedResult["type"] == "updateDwarfs"):
 				SignalBus.update_dwarfs_data.emit(parsedResult["data"])
-				print(parsedResult)
-				
+			if (parsedResult["type"] == "updateLeaderBoard"):
+				SignalBus.fetch_leaderboard_data.emit(parsedResult["data"])
 	
 	elif state == WebSocketPeer.STATE_CLOSING:
 		pass

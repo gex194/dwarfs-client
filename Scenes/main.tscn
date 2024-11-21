@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=4 uid="uid://dny7gpp3gr2ix"]
+[gd_scene load_steps=9 format=4 uid="uid://dny7gpp3gr2ix"]
 
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_o6qxd"]
 [ext_resource type="Script" path="res://Scripts/main_camera.gd" id="2_lyucm"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://Scripts/button.gd" id="4_n6sat"]
 [ext_resource type="Script" path="res://Singletons/Connection.gd" id="5_utmmc"]
 [ext_resource type="TileSet" uid="uid://cjvlmebhhiwcw" path="res://Tilesets/terain.tres" id="6_bpi6s"]
+[ext_resource type="Script" path="res://Scripts/leaderboard_list.gd" id="7_swts6"]
+[ext_resource type="Script" path="res://Scripts/leaderboard_search.gd" id="8_k5w7t"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_o6qxd")
@@ -31,17 +33,58 @@ navigation_enabled = false
 [node name="WebsocketManager" type="Node" parent="."]
 script = ExtResource("5_utmmc")
 
-[node name="Control" type="Control" parent="."]
+[node name="GUI_Layer" type="CanvasLayer" parent="."]
+
+[node name="GUI" type="Control" parent="GUI_Layer"]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 576.0
+offset_top = 11.0
+offset_right = 1146.0
+offset_bottom = 311.0
+mouse_force_pass_scroll_events = false
 
-[node name="Button" type="Button" parent="Control"]
+[node name="leaderboard" type="Button" parent="GUI_Layer/GUI"]
 layout_mode = 0
-offset_left = 256.0
-offset_top = 57.0
-offset_right = 321.0
-offset_bottom = 88.0
-text = "Update"
+offset_left = 456.0
+offset_top = 9.0
+offset_right = 564.0
+offset_bottom = 40.0
+toggle_mode = true
+text = "Leaderboard"
 script = ExtResource("4_n6sat")
+
+[node name="leaderboard_panel" type="Panel" parent="GUI_Layer/GUI"]
+visible = false
+top_level = true
+layout_mode = 0
+offset_left = 591.0
+offset_top = 18.0
+offset_right = 1030.0
+offset_bottom = 289.0
+
+[node name="leaderboard_list" type="ItemList" parent="GUI_Layer/GUI/leaderboard_panel"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 45.0
+offset_right = 424.0
+offset_bottom = 260.0
+allow_reselect = true
+max_text_lines = 2
+item_count = 2
+max_columns = 2
+same_column_width = true
+fixed_column_width = 100
+item_0/text = "Gnome ID"
+item_0/selectable = false
+item_1/text = "Score"
+item_1/selectable = false
+script = ExtResource("7_swts6")
+
+[node name="leaderboard_search" type="LineEdit" parent="GUI_Layer/GUI/leaderboard_panel"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 424.0
+offset_bottom = 39.0
+script = ExtResource("8_k5w7t")
