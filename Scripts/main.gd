@@ -20,6 +20,8 @@ var gnomes_updated_positions: Array = []
 var grid_data: Array = [];
 var updated_positions_dict = {}
 
+var is_init_completed = false;
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -35,10 +37,13 @@ func _on_init_data_recieved(data: Array) -> void:
 		if (cell.has("dwarf") && cell["dwarf"]):
 			#Generate a gnome and add to the scene
 			self.add_child(generate_gnome(cell))
+	is_init_completed = true
 
 func _on_update_dwarfs_recieved(data: Dictionary) -> void:
+	if (!is_init_completed):
+		return
+	
 	for dwarf in data["dwarfs"]:
-		get_value_by_id(dwarf["id"])
 		gnomes_updated_positions.push_back(dwarf)
 	move_gnomes()
 
@@ -70,21 +75,15 @@ func generate_gnome(cell: Dictionary) -> Node2D:
 				gnome.animation = "idle"
 	return gnome
 
-func get_value_by_id(target_id: String):
-	gnomes_to_move.push_back(target_id)
-
 func move_gnomes() -> void:
-	if (gnomes_to_move.size() > 0 and gnomes_updated_positions.size() > 0):
+	if (gnomes_updated_positions.size() > 0):
 		# Create dictionary for quick lookups of updated positions by ID
 		for updated in gnomes_updated_positions:
 			updated_positions_dict[updated["id"]] = updated
-			
-		# Move each gnome to its updated position
-		for original in gnomes_to_move:
-			var updated_dictionary_value = updated_positions_dict.get(original, null)
+			var updated_dictionary_value = updated_positions_dict.get(updated["id"], null)
 			if updated_dictionary_value:
-				var current_gnome = await get_node(original)
-					
+				var current_gnome = await get_node(updated["id"])
+				
 				current_gnome.stop();
 				match(updated_dictionary_value["direction"]):
 					"W":

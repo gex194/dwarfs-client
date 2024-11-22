@@ -15,7 +15,7 @@ func _process(delta: float) -> void:
 
 func _handle_item_selected(id: int):
 	var gnome_id = self.get_item_text(id)
-	var gnome: AnimatedSprite2D = get_node("../../../../" + gnome_id)
+	var gnome: AnimatedSprite2D = await get_node("../../../../" + gnome_id)
 	if (gnome):
 		main_camera.zoom = Vector2(13,13);
 		var offset = Vector2(-45, -25)
