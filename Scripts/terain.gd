@@ -11,10 +11,12 @@ var gold_cell_cords: Vector2 = Vector2(14, 4)
 var rock_cell_cords: Vector2 = Vector2(14, 3)
 var dig_animation_cell_cords: Vector2 = Vector2(5, 2)
 
-const TERRAIN_SIZE = 1000 # (1000x1000)
+const TERRAIN_SIZE = 500 # (1000x1000)
 
 var cells_data: Array = []
 var current_index: int = 0;
+
+var rock_update_array: Array = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -49,13 +51,19 @@ func process_tile_change(chunk_size: int = 100):
 		processed_count += 1
 	if (current_index >= cells_data.size()):
 		current_index = 0
+	apply_tiles()
+
+func apply_tiles():
+	terrain_dirt.set_cells_terrain_connect(rock_update_array,0,1, false)
+	rock_update_array.clear()
 
 func set_dirt_tile(cell: Dictionary) -> void:
 	var cords = Vector2i(cell["x"], cell["y"])
 	match (cell["type"]):
 		CellType.EMPTY:
-			terrain_dirt.set_cell(cords, 1, dig_animation_cell_cords)
+			terrain_dirt.erase_cell(cords)
 		CellType.ROCK:
-			terrain_dirt.set_cell(cords, 1, dirt_background_cell_cords)
+			rock_update_array.append(cords)
+			#terrain_dirt.set_cell(cords, 1, dirt_background_cell_cords)
 		CellType.TREASURE:
 			terrain_dirt.set_cell(cords, 1, gold_cell_cords)

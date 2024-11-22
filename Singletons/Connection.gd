@@ -37,6 +37,7 @@ func _exit_tree() -> void:
 	socket.close()
 
 func init_connection() -> void:
+	socket.inbound_buffer_size = 65535 * 100
 	var err = socket.connect_to_url(websocket_url)
 	if (err != OK):
 		print("Unable to connect")

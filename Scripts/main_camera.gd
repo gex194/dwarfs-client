@@ -4,10 +4,18 @@ extends Camera2D
 @export var max_zoom: Vector2 = Vector2(10, 10)
 @export var tilemaplayer: TileMapLayer
 
+@onready var gui_control: ItemList = get_node("../GUI_Layer/GUI/leaderboard_panel/leaderboard_list")
+
 var previous_position: Vector2 = Vector2(0,0)
 var move_camera: bool = false;
 var max_zoomout = Vector2(0.16345, 0.16345)
-var sky_offset_y = 299
+var sky_offset_y = 499
+
+var is_map_scroll_enabled = true;
+
+func _ready() -> void:
+	gui_control.mouse_entered.connect(disable_map_scroll)
+	gui_control.mouse_exited.connect(enable_map_scroll)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -74,14 +82,21 @@ func get_tilemap_info():
 	)
 	
 	return {"size": tilemaplayer_size, "tile_size": tile_size}
-	
+
+func enable_map_scroll() -> void:
+	is_map_scroll_enabled = true
+
+func disable_map_scroll() -> void:
+	is_map_scroll_enabled =  false
+
 func handleCameraControls(delta) -> void:
-	if (Input.is_action_just_released("ZoomIn") && self.zoom < max_zoom):
-		self.zoom = lerp(self.zoom, self.zoom + Vector2(zoom_speed, zoom_speed), zoom_speed * self.zoom.x * delta)
-	if (Input.is_action_just_released("ZoomOut") && self.zoom > max_zoomout):
-		self.zoom = lerp(self.zoom, self.zoom - Vector2(zoom_speed, zoom_speed), zoom_speed * self.zoom.x * delta)
-		if (self.zoom < max_zoomout):
-			self.zoom = max_zoomout
+	if (is_map_scroll_enabled):
+		if (Input.is_action_just_released("ZoomIn") && self.zoom < max_zoom):
+			self.zoom = lerp(self.zoom, self.zoom + Vector2(zoom_speed, zoom_speed), zoom_speed * self.zoom.x * delta)
+		if (Input.is_action_just_released("ZoomOut") && self.zoom > max_zoomout):
+			self.zoom = lerp(self.zoom, self.zoom - Vector2(zoom_speed, zoom_speed), zoom_speed * self.zoom.x * delta)
+			if (self.zoom < max_zoomout):
+				self.zoom = max_zoomout
 
 
 func _unhandled_input(event: InputEvent):

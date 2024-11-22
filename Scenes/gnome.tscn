@@ -220,6 +220,7 @@ animations = [{
 }]
 
 [node name="gnome" type="AnimatedSprite2D"]
+z_index = 2
 scale = Vector2(0.25, 0.25)
 sprite_frames = SubResource("SpriteFrames_idos5")
 animation = &"damaged"

@@ -28,6 +28,7 @@ func _ready() -> void:
 	#await Socket.init_connection()
 
 func _on_init_data_recieved(data: Array) -> void:
+	print("init called")
 	grid_data = data;
 	for cell in data:
 		#Set tile type on TileMapGrid
@@ -121,6 +122,7 @@ func move_gnomes() -> void:
 		# Clear arrays after processing
 		gnomes_to_move.clear()
 		gnomes_updated_positions.clear()
+		updated_positions_dict.clear()
 
 func tween_callback(tween: Tween, current_gnome: AnimatedSprite2D, target_position: Vector2) -> void:
 	current_gnome.position = target_position  # Set final position to target

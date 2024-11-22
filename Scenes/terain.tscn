@@ -5,6 +5,7 @@
 
 [node name="terain" type="TileMapLayer"]
 tile_set = ExtResource("1_xrmj3")
+rendering_quadrant_size = 14
 collision_enabled = false
 navigation_enabled = false
 script = ExtResource("3_0mnmk")
