@@ -77,43 +77,41 @@ func generate_gnome(cell: Dictionary) -> Node2D:
 
 func move_gnomes() -> void:
 	if (gnomes_updated_positions.size() > 0):
-		# Create dictionary for quick lookups of updated positions by ID
 		for updated in gnomes_updated_positions:
 			updated_positions_dict[updated["id"]] = updated
 			var updated_dictionary_value = updated_positions_dict.get(updated["id"], null)
 			if updated_dictionary_value:
 				var current_gnome = await get_node(updated["id"])
-				
-				current_gnome.stop();
-				match(updated_dictionary_value["direction"]):
-					"W":
+				if (current_gnome):
+					current_gnome.stop();
+					match(updated_dictionary_value["direction"]):
+						"W":
 						#current_gnome.animation = "walk"
-						current_gnome.flip_h = true
-					"E":
-						current_gnome.flip_h = false
-					_:
-						current_gnome.flip_h = false
-				match(updated_dictionary_value["action"]):
-					GnomeActionType.DIG:
-						current_gnome.animation = GnomeAnimationType.HIT
-					GnomeActionType.MOVE:
-						current_gnome.animation = GnomeAnimationType.WALK
-					GnomeActionType.HOLD_TREASURE:
-						current_gnome.animation = GnomeAnimationType.TREASURE
-					_:
-						current_gnome.animation = GnomeAnimationType.IDLE
-				current_gnome.play()
-				# Precompute target position
-				var target_position = Vector2(
-					updated_dictionary_value["x"] * gnome_position_factor + gnome_offset,
-					updated_dictionary_value["y"] * gnome_position_factor + gnome_offset)
+							current_gnome.flip_h = true
+						"E":
+							current_gnome.flip_h = false
+						_:
+							current_gnome.flip_h = false
+					match(updated_dictionary_value["action"]):
+						GnomeActionType.DIG:
+							current_gnome.animation = GnomeAnimationType.HIT
+						GnomeActionType.MOVE:
+							current_gnome.animation = GnomeAnimationType.WALK
+						GnomeActionType.HOLD_TREASURE:
+							current_gnome.animation = GnomeAnimationType.TREASURE
+						_:
+							current_gnome.animation = GnomeAnimationType.IDLE
+					current_gnome.play()
+					# Precompute target position
+					var target_position = Vector2(
+						updated_dictionary_value["x"] * gnome_position_factor + gnome_offset,
+						updated_dictionary_value["y"] * gnome_position_factor + gnome_offset)
 						
 					# Create and set up tween
-				var tween = create_tween()
-				tween.tween_property(current_gnome, "position", target_position, 2)
-				tween.tween_callback(tween_callback.bind(
-					tween, current_gnome, target_position))
-						
+					var tween = create_tween()
+					tween.tween_property(current_gnome, "position", target_position, 2)
+					tween.tween_callback(tween_callback.bind(
+						tween, current_gnome, target_position))
 		# Clear arrays after processing
 		gnomes_to_move.clear()
 		gnomes_updated_positions.clear()
