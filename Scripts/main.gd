@@ -25,7 +25,6 @@ var updated_positions_dict = {}
 func _ready() -> void:
 	SignalBus.init_grid_data.connect(_on_init_data_recieved)
 	SignalBus.update_dwarfs_data.connect(_on_update_dwarfs_recieved)
-	#await Socket.init_connection()
 
 func _on_init_data_recieved(data: Array) -> void:
 	print("init called")
@@ -39,7 +38,7 @@ func _on_init_data_recieved(data: Array) -> void:
 
 func _on_update_dwarfs_recieved(data: Dictionary) -> void:
 	for dwarf in data["dwarfs"]:
-		get_value_by_id(dwarf["id"], grid_data)
+		get_value_by_id(dwarf["id"])
 		gnomes_updated_positions.push_back(dwarf)
 	move_gnomes()
 
@@ -71,11 +70,8 @@ func generate_gnome(cell: Dictionary) -> Node2D:
 				gnome.animation = "idle"
 	return gnome
 
-func get_value_by_id(target_id: String, data: Array):
-	for cell in data:
-		if (cell["dwarf"]):
-			if (cell["dwarf"]["id"] == target_id):
-				gnomes_to_move.push_back(cell["dwarf"])
+func get_value_by_id(target_id: String):
+	gnomes_to_move.push_back(target_id)
 
 func move_gnomes() -> void:
 	if (gnomes_to_move.size() > 0 and gnomes_updated_positions.size() > 0):
@@ -85,11 +81,11 @@ func move_gnomes() -> void:
 			
 		# Move each gnome to its updated position
 		for original in gnomes_to_move:
-			var updated_dictionary_value = updated_positions_dict.get(original["id"], null)
+			var updated_dictionary_value = updated_positions_dict.get(original, null)
 			if updated_dictionary_value:
-				var current_gnome = get_node(str(original["id"]))
+				var current_gnome = await get_node(original)
+					
 				current_gnome.stop();
-				#current_gnome.play("walk")  # Play walk animation
 				match(updated_dictionary_value["direction"]):
 					"W":
 						#current_gnome.animation = "walk"
