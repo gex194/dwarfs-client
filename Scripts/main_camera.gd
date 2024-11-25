@@ -67,10 +67,10 @@ func clamp_camera_with_zoom(camera: Camera2D):
 	var max_y = camera.limit_bottom + sky_offset_y - viewport_size.y / camera.zoom.y
 
 	# Clamp the camera's position to stay within bounds
-	var clamped_position = camera.global_position
+	var clamped_position = camera.position
 	clamped_position.x = clamp(clamped_position.x, min_x, max_x)
 	clamped_position.y = clamp(clamped_position.y, min_y, max_y)
-	camera.global_position = clamped_position
+	camera.position = clamped_position
 
 func get_tilemap_info():
 	var tile_size = tilemaplayer.tile_set.tile_size
@@ -92,7 +92,11 @@ func disable_map_scroll() -> void:
 func handleCameraControls(delta) -> void:
 	if (is_map_scroll_enabled):
 		if (Input.is_action_just_released("ZoomIn") && self.zoom < max_zoom):
+			self.position_smoothing_enabled = false
+			var mouse_pos = get_global_mouse_position()
 			self.zoom = lerp(self.zoom, self.zoom + Vector2(zoom_speed, zoom_speed), zoom_speed * self.zoom.x * delta)
+			var new_mouse_pos = get_global_mouse_position()
+			self.position += mouse_pos - new_mouse_pos
 		if (Input.is_action_just_released("ZoomOut") && self.zoom > max_zoomout):
 			self.zoom = lerp(self.zoom, self.zoom - Vector2(zoom_speed, zoom_speed), zoom_speed * self.zoom.x * delta)
 			if (self.zoom < max_zoomout):
@@ -101,6 +105,7 @@ func handleCameraControls(delta) -> void:
 
 func _unhandled_input(event: InputEvent):
 	if event is InputEventMouseButton && event.button_index == MOUSE_BUTTON_LEFT:
+		self.position_smoothing_enabled = true
 		get_viewport().set_input_as_handled();
 		if event.is_pressed():
 			previous_position = event.position;

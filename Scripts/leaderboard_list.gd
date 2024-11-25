@@ -17,6 +17,7 @@ func _handle_item_selected(id: int):
 	var gnome_id = self.get_item_text(id)
 	var gnome: AnimatedSprite2D = await get_node("../../../../" + gnome_id)
 	if (gnome):
+		main_camera.position_smoothing_enabled = true
 		main_camera.zoom = Vector2(13,13);
 		var offset = Vector2(-45, -25)
 		main_camera.position = gnome.position + offset

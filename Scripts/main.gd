@@ -4,6 +4,7 @@ var StaticData = preload("res://Singletons/StaticData.gd")
 @onready var Socket = get_node("WebsocketManager")
 var Gnome = preload("res://Scenes/gnome.tscn")
 @onready var terrain: TileMapLayer = get_node("terain")
+@onready var terrain_dirt: TileMapLayer = get_node("terrain_dirt")
 @onready var main_camera: Camera2D = get_node("main_camera")
 
 # Atlas tiles cords
@@ -29,7 +30,6 @@ func _ready() -> void:
 	SignalBus.update_dwarfs_data.connect(_on_update_dwarfs_recieved)
 
 func _on_init_data_recieved(data: Array) -> void:
-	print("init called")
 	grid_data = data;
 	for cell in data:
 		#Set tile type on TileMapGrid
@@ -52,7 +52,7 @@ func set_dirt_tile(cell: Dictionary) -> void:
 		CellType.EMPTY:
 			terrain.set_cell(Vector2(cell["x"], cell["y"]), 1, dirt_background_cell_cords)
 		CellType.ROCK:
-			terrain.set_cell(Vector2(cell["x"], cell["y"]), 1, dirt_background_cell_cords)
+			terrain.set_cell(Vector2(cell["x"], cell["y"]), 1, dirt_cell_cords)
 		CellType.TREASURE:
 			terrain.set_cell(Vector2(cell["x"], cell["y"]), 1, gold_cell_cords)
 
@@ -86,7 +86,6 @@ func move_gnomes() -> void:
 					current_gnome.stop();
 					match(updated_dictionary_value["direction"]):
 						"W":
-						#current_gnome.animation = "walk"
 							current_gnome.flip_h = true
 						"E":
 							current_gnome.flip_h = false

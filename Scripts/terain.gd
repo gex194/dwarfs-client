@@ -61,9 +61,8 @@ func set_dirt_tile(cell: Dictionary) -> void:
 	var cords = Vector2i(cell["x"], cell["y"])
 	match (cell["type"]):
 		CellType.EMPTY:
-			terrain_dirt.erase_cell(cords)
-		CellType.ROCK:
 			rock_update_array.append(cords)
-			#terrain_dirt.set_cell(cords, 1, dirt_background_cell_cords)
+		CellType.ROCK:
+			terrain_dirt.erase_cell(cords)
 		CellType.TREASURE:
 			terrain_dirt.set_cell(cords, 1, gold_cell_cords)
