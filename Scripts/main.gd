@@ -55,12 +55,13 @@ func _on_pause_game_recieved(data: Dictionary) -> void:
 		
 func generate_gnome(cell: Dictionary) -> Node2D:
 	var gnome: AnimatedSprite2D = Gnome.instantiate()
-	gnome.name = str(cell["dwarf"]["id"])
+	var dwarf = cell["dwarf"] if cell.has("dwarf") else cell
+	gnome.name = str(dwarf["id"])
 	gnome.position = Vector2(
-		cell["dwarf"]["x"] * gnome_position_factor + gnome_offset,
-		cell["dwarf"]["y"] * gnome_position_factor + gnome_offset)
-	if (cell["dwarf"]["direction"]):
-		match(cell["dwarf"]["direction"]):
+		dwarf["x"] * gnome_position_factor + gnome_offset,
+		dwarf["y"] * gnome_position_factor + gnome_offset)
+	if (dwarf["direction"]):
+		match(dwarf["direction"]):
 			"W":
 				gnome.animation = "walk"
 				gnome.flip_h = true
