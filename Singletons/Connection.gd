@@ -26,6 +26,7 @@ func _process(delta: float) -> void:
 				"gamePaused":
 					SignalBus.pause_game.emit(data)
 				"addDwarfs":
+					print(data)
 					SignalBus.add_dwarfs_data.emit(data)
 	
 	elif state == WebSocketPeer.STATE_CLOSING:

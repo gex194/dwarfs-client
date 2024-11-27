@@ -12,7 +12,7 @@ func _process(delta: float) -> void:
 	self.text = "%02d:%02d" % time_left_to_play()
 	
 
-func _on_init_grid_data_recieved() -> void:
+func _on_init_grid_data_recieved(data: Array) -> void:
 	timer.stop()
 	timer.wait_time = 300
 	timer.start()

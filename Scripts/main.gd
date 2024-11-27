@@ -18,14 +18,14 @@ var gnomes: Node = Node.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	gnomes.name = "gnomes"
 	SignalBus.init_grid_data.connect(_on_init_data_recieved)
 	SignalBus.update_dwarfs_data.connect(_on_update_dwarfs_recieved)
 	SignalBus.add_dwarfs_data.connect(_on_dwarfs_add_data_recieved)
 	SignalBus.pause_game.connect(_on_pause_game_recieved)
 
 func _on_init_data_recieved(data: Array) -> void:
-
-	gnomes.name = "gnomes"
+	print(data)
 	grid_data = data;
 	for cell in data:
 		#Set tile type on TileMapGrid
@@ -33,7 +33,9 @@ func _on_init_data_recieved(data: Array) -> void:
 		if (cell.has("dwarf") && cell["dwarf"]):
 			#Generate a gnome and add to the scene
 			gnomes.add_child(generate_gnome(cell))
-	self.add_child(gnomes)
+	var gnomes_node = get_node("gnomes")
+	if (!gnomes_node):
+		self.add_child(gnomes)
 
 func _on_dwarfs_add_data_recieved(data: Dictionary) -> void:
 	for dwarf in data["dwarfs"]:
@@ -47,9 +49,10 @@ func _on_update_dwarfs_recieved(data: Dictionary) -> void:
 func _on_pause_game_recieved(data: Dictionary) -> void:
 	terrain_dirt.clear()
 	var gnomes_node = get_node("gnomes")
-	if (gnomes_node):
-		gnomes_node.queue_free()
-
+	#if (gnomes_node):
+	for n in gnomes_node.get_children():
+		n.queue_free()
+		
 func generate_gnome(cell: Dictionary) -> Node2D:
 	var gnome: AnimatedSprite2D = Gnome.instantiate()
 	gnome.name = str(cell["dwarf"]["id"])
@@ -75,7 +78,7 @@ func move_gnomes() -> void:
 			updated_positions_dict[updated["id"]] = updated
 			var updated_dictionary_value = updated_positions_dict.get(updated["id"], null)
 			if updated_dictionary_value:
-				var current_gnome = await get_node(updated["id"])
+				var current_gnome = await get_node("gnomes/" + updated["id"])
 				if (current_gnome):
 					current_gnome.stop();
 					match(updated_dictionary_value["direction"]):
