@@ -12,10 +12,9 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_handle_filter_input()
 	
-
 func _handle_item_selected(id: int):
 	var gnome_id = self.get_item_text(id)
-	var gnome: AnimatedSprite2D = await get_node("../../../../" + gnome_id)
+	var gnome: AnimatedSprite2D = await get_node("../../../../gnomes/" + gnome_id)
 	if (gnome):
 		main_camera.position_smoothing_enabled = true
 		main_camera.zoom = Vector2(13,13);
@@ -31,7 +30,7 @@ func _handle_item_selected(id: int):
 func _handle_filter_input():
 	if (leaderboard_data.size() > 0):
 		self.clear()
-		self.add_item("Gnome ID", null, false)
+		self.add_item("Holder", null, false)
 		self.add_item("Score", null, false)
 		var filtered_data = leaderboard_data
 		if (search_input.text):
