@@ -4,11 +4,23 @@ extends Label
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	timer.start()
+	SignalBus.pause_game.connect(_on_game_pause_recieved)
+	SignalBus.init_grid_data.connect(_on_init_grid_data_recieved)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	self.text = "%02d:%02d" % time_left_to_play()
+	
+
+func _on_init_grid_data_recieved() -> void:
+	timer.stop()
+	timer.wait_time = 300
+	timer.start()
+
+func _on_game_pause_recieved(data: Dictionary) -> void:
+	timer.stop()
+	timer.wait_time = data["gameStartsIn"] / 1000
+	timer.start()
 
 func time_left_to_play() -> Array:
 	var time_left = timer.time_left

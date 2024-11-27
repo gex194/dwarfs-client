@@ -1,18 +1,12 @@
 extends Node2D
 
 var StaticData = preload("res://Singletons/StaticData.gd")
-@onready var Socket = get_node("WebsocketManager")
 var Gnome = preload("res://Scenes/gnome.tscn")
+
+@onready var Socket = get_node("WebsocketManager")
 @onready var terrain: TileMapLayer = get_node("terain")
 @onready var terrain_dirt: TileMapLayer = get_node("terrain_dirt")
 @onready var main_camera: Camera2D = get_node("main_camera")
-
-# Atlas tiles cords
-var dirt_cell_cords: Vector2 = Vector2(1, 14)
-var grass_cell_cords: Vector2 = Vector2(1, 13)
-var dirt_background_cell_cords: Vector2 = Vector2(1,2)
-var gold_cell_cords: Vector2 = Vector2(14, 4)
-var rock_cell_cords: Vector2 = Vector2(14, 3)
 
 var gnome_offset: int = 4;
 var gnome_position_factor: int = 8;
@@ -20,41 +14,41 @@ var gnomes_to_move: Array = []
 var gnomes_updated_positions: Array = []
 var grid_data: Array = [];
 var updated_positions_dict = {}
-
-var is_init_completed = false;
-
+var gnomes: Node = Node.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	SignalBus.init_grid_data.connect(_on_init_data_recieved)
 	SignalBus.update_dwarfs_data.connect(_on_update_dwarfs_recieved)
+	SignalBus.add_dwarfs_data.connect(_on_dwarfs_add_data_recieved)
+	SignalBus.pause_game.connect(_on_pause_game_recieved)
 
 func _on_init_data_recieved(data: Array) -> void:
+
+	gnomes.name = "gnomes"
 	grid_data = data;
 	for cell in data:
 		#Set tile type on TileMapGrid
-		set_dirt_tile(cell)
+		TerrainHelper.set_dirt_tile(cell, terrain_dirt)
 		if (cell.has("dwarf") && cell["dwarf"]):
 			#Generate a gnome and add to the scene
-			self.add_child(generate_gnome(cell))
-	is_init_completed = true
+			gnomes.add_child(generate_gnome(cell))
+	self.add_child(gnomes)
+
+func _on_dwarfs_add_data_recieved(data: Dictionary) -> void:
+	for dwarf in data["dwarfs"]:
+		gnomes.add_child(generate_gnome(dwarf))
 
 func _on_update_dwarfs_recieved(data: Dictionary) -> void:
-	if (!is_init_completed):
-		return
-	
 	for dwarf in data["dwarfs"]:
 		gnomes_updated_positions.push_back(dwarf)
 	move_gnomes()
 
-func set_dirt_tile(cell: Dictionary) -> void:
-	match (cell["type"]):
-		CellType.EMPTY:
-			terrain.set_cell(Vector2(cell["x"], cell["y"]), 1, dirt_background_cell_cords)
-		CellType.ROCK:
-			terrain.set_cell(Vector2(cell["x"], cell["y"]), 1, dirt_cell_cords)
-		CellType.TREASURE:
-			terrain.set_cell(Vector2(cell["x"], cell["y"]), 1, gold_cell_cords)
+func _on_pause_game_recieved(data: Dictionary) -> void:
+	terrain_dirt.clear()
+	var gnomes_node = get_node("gnomes")
+	if (gnomes_node):
+		gnomes_node.queue_free()
 
 func generate_gnome(cell: Dictionary) -> Node2D:
 	var gnome: AnimatedSprite2D = Gnome.instantiate()

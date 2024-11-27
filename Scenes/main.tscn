@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dny7gpp3gr2ix"]
+[gd_scene load_steps=12 format=3 uid="uid://dny7gpp3gr2ix"]
 
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_o6qxd"]
 [ext_resource type="Script" path="res://Scripts/main_camera.gd" id="2_lyucm"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://blxq65x27tuke" path="res://Assets/x-twitter-brands-solid.svg" id="8_42i6x"]
 [ext_resource type="Script" path="res://Scripts/leaderboard_search.gd" id="8_k5w7t"]
 [ext_resource type="Script" path="res://Scripts/twitter_button.gd" id="9_awwse"]
+[ext_resource type="Script" path="res://Scripts/gnomes_count.gd" id="11_nxjjp"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_o6qxd")
@@ -38,42 +39,16 @@ script = ExtResource("5_utmmc")
 [node name="GUI_Layer" type="CanvasLayer" parent="."]
 layer = 4
 
-[node name="GUI_top" type="Control" parent="GUI_Layer"]
-layout_mode = 3
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -59.0
-offset_top = 10.0
-offset_right = 52.0
-offset_bottom = 52.0
-grow_horizontal = 2
-
-[node name="timer_panel" type="Panel" parent="GUI_Layer/GUI_top"]
-layout_mode = 0
-offset_right = 110.0
-offset_bottom = 40.0
-
-[node name="time" type="Label" parent="GUI_Layer/GUI_top/timer_panel"]
-layout_mode = 0
-offset_right = 109.0
-offset_bottom = 39.0
-text = "05:00"
-horizontal_alignment = 1
-vertical_alignment = 1
-script = ExtResource("6_3pbdp")
-
 [node name="GUI" type="Control" parent="GUI_Layer"]
 z_index = 3
 layout_mode = 3
-anchors_preset = 1
+anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -246.0
-offset_top = 5.0
-offset_right = -2.0
-offset_bottom = 644.0
+anchor_bottom = 1.0
+offset_left = -384.0
 grow_horizontal = 0
+grow_vertical = 2
 mouse_force_pass_scroll_events = false
 
 [node name="leaderboard_panel" type="Panel" parent="GUI_Layer/GUI"]
@@ -82,21 +57,21 @@ light_mask = 4
 visibility_layer = 4
 z_index = 3
 layout_mode = 1
-anchors_preset = 1
+anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -244.0
-offset_top = 10.0
-offset_right = -4.0
-offset_bottom = 642.0
+anchor_bottom = 1.0
+offset_left = -328.0
 grow_horizontal = 0
+grow_vertical = 2
 
 [node name="leaderboard_label" type="Label" parent="GUI_Layer/GUI/leaderboard_panel"]
 layout_mode = 0
-offset_left = 8.0
-offset_top = 62.0
-offset_right = 108.0
-offset_bottom = 85.0
+offset_left = 7.0
+offset_top = 98.0
+offset_right = 255.0
+offset_bottom = 153.0
+theme_override_font_sizes/font_size = 30
 text = "Leaderboard"
 
 [node name="leaderboard_list" type="ItemList" parent="GUI_Layer/GUI/leaderboard_panel"]
@@ -104,17 +79,18 @@ light_mask = 4
 visibility_layer = 4
 z_index = 3
 layout_mode = 0
-offset_left = 8.0
-offset_top = 125.0
-offset_right = 233.0
-offset_bottom = 340.0
+offset_left = 7.0
+offset_top = 274.0
+offset_right = 320.0
+offset_bottom = 515.0
 mouse_force_pass_scroll_events = false
+theme_override_font_sizes/font_size = 25
 allow_reselect = true
-max_text_lines = 2
 item_count = 2
 max_columns = 2
 same_column_width = true
-fixed_column_width = 100
+fixed_column_width = 144
+icon_mode = 0
 item_0/text = "Gnome ID"
 item_0/selectable = false
 item_1/text = "Score"
@@ -126,39 +102,64 @@ light_mask = 4
 visibility_layer = 4
 z_index = 3
 layout_mode = 0
-offset_left = 8.0
-offset_top = 88.0
-offset_right = 233.0
-offset_bottom = 119.0
+offset_left = 7.0
+offset_top = 201.0
+offset_right = 320.0
+offset_bottom = 264.0
+theme_override_font_sizes/font_size = 25
 placeholder_text = "Gnome search..."
 script = ExtResource("8_k5w7t")
 
-[node name="transaction_label" type="Label" parent="GUI_Layer/GUI/leaderboard_panel"]
-layout_mode = 0
-offset_left = 8.0
-offset_top = 371.0
-offset_right = 107.0
-offset_bottom = 394.0
-text = "Transactions"
-
-[node name="transaction_list" type="ItemList" parent="GUI_Layer/GUI/leaderboard_panel"]
-layout_mode = 0
-offset_left = 8.0
-offset_top = 397.0
-offset_right = 233.0
-offset_bottom = 615.0
-
 [node name="twitter_button" type="Button" parent="GUI_Layer/GUI/leaderboard_panel"]
 layout_mode = 0
-offset_left = 8.0
 offset_top = 10.0
-offset_right = 49.0
-offset_bottom = 51.0
+offset_right = 73.0
+offset_bottom = 83.0
 mouse_default_cursor_shape = 2
 icon = ExtResource("8_42i6x")
 flat = true
 expand_icon = true
 script = ExtResource("9_awwse")
+
+[node name="time" type="Label" parent="GUI_Layer/GUI/leaderboard_panel"]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 620.0
+offset_right = 265.0
+offset_bottom = 676.0
+theme_override_font_sizes/font_size = 40
+text = "05:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("6_3pbdp")
+
+[node name="gnomes_count_label" type="Label" parent="GUI_Layer/GUI/leaderboard_panel"]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 154.0
+offset_right = 156.0
+offset_bottom = 203.0
+theme_override_font_sizes/font_size = 25
+text = "Gnomes:"
+
+[node name="gnomes_count" type="Label" parent="GUI_Layer/GUI/leaderboard_panel"]
+layout_mode = 0
+offset_left = 122.0
+offset_top = 154.0
+offset_right = 162.0
+offset_bottom = 203.0
+theme_override_font_sizes/font_size = 25
+text = "0"
+script = ExtResource("11_nxjjp")
+
+[node name="time_left" type="Label" parent="GUI_Layer/GUI/leaderboard_panel"]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 547.0
+offset_right = 255.0
+offset_bottom = 602.0
+theme_override_font_sizes/font_size = 40
+text = "Time Left:"
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 300.0

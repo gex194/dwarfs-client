@@ -13,14 +13,20 @@ func _process(delta: float) -> void:
 	if state == WebSocketPeer.STATE_OPEN:
 		while socket.get_available_packet_count():
 			var parsedResult = JSON.parse_string(socket.get_packet().get_string_from_utf8())
-			if (parsedResult["type"] == "fullGrid"):
-				SignalBus.init_grid_data.emit(parsedResult["data"])
-			if (parsedResult["type"] == "updateCells"):
-				SignalBus.update_grid_data.emit(parsedResult["data"])
-			if (parsedResult["type"] == "updateDwarfs"):
-				SignalBus.update_dwarfs_data.emit(parsedResult["data"])
-			if (parsedResult["type"] == "updateLeaderBoard"):
-				SignalBus.fetch_leaderboard_data.emit(parsedResult["data"])
+			var data = parsedResult["data"]
+			match(parsedResult["type"]):
+				"fullGrid":
+					SignalBus.init_grid_data.emit(data)
+				"updateCells":
+					SignalBus.update_grid_data.emit(data)
+				"updateDwarfs":
+					SignalBus.update_dwarfs_data.emit(data)
+				"updateLeaderBoard":
+					SignalBus.fetch_leaderboard_data.emit(data)
+				"gamePaused":
+					SignalBus.pause_game.emit(data)
+				"addDwarfs":
+					SignalBus.add_dwarfs_data.emit(data)
 	
 	elif state == WebSocketPeer.STATE_CLOSING:
 		pass

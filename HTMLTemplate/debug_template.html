@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+	</head>
+	<body>
+        <div id="outer-container">
+            <div id="canvas-container">
+                <canvas id="canvas"></canvas>
+            </div>
+        </div>
+		<script src="$GODOT_URL"></script>
+		<script>
+			var engine = new Engine($GODOT_CONFIG);
+			engine.startGame();
+		</script>
+        <style>
+            body {
+                background-color: #000000;
+                opacity: 1;
+                background-image:  linear-gradient(30deg, #804900 12%, transparent 12.5%, transparent 87%, #804900 87.5%, #804900), linear-gradient(150deg, #804900 12%, transparent 12.5%, transparent 87%, #804900 87.5%, #804900), linear-gradient(30deg, #804900 12%, transparent 12.5%, transparent 87%, #804900 87.5%, #804900), linear-gradient(150deg, #804900 12%, transparent 12.5%, transparent 87%, #804900 87.5%, #804900), linear-gradient(60deg, #80490077 25%, transparent 25.5%, transparent 75%, #80490077 75%, #80490077), linear-gradient(60deg, #80490077 25%, transparent 25.5%, transparent 75%, #80490077 75%, #80490077);
+                background-size: 80px 140px;
+                background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+            }
+
+            #outer-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100vh;
+            }
+
+            #canvas-container {
+                width: 100%;
+                height: 100%;
+                left: 0;
+                top: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            #canvas {
+                display: block;
+                width: auto;
+                height: auto;
+            }
+        </style>
+	</body>
+</html>
