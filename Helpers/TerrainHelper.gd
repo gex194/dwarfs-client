@@ -1,10 +1,11 @@
 extends Node
 
-func set_dirt_tile(cell: Dictionary, terrain: TileMapLayer) -> void:
+func set_dirt_tile(cell: Dictionary, terrain: TileMapLayer, rock_update_array: Array) -> void:
 	var cell_cords = Vector2(cell["x"], cell["y"])
 	match (cell["type"]):
 		CellType.EMPTY:
-			terrain.set_cell(cell_cords, 1, CellTypeCords.EMPTY)
+			rock_update_array.append(cell_cords)
+			#terrain.set_cell(cell_cords, 1, CellTypeCords.EMPTY)
 		CellType.ROCK:
 			terrain.set_cell(cell_cords, 1, CellTypeCords.ROCK)
 		CellType.GOLD:

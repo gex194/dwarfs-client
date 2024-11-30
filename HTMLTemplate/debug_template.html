@@ -5,10 +5,12 @@
 	</head>
 	<body>
         <div id="outer-container">
+            <div class="title">$MINES Infinite Mines</div>
             <div id="canvas-container">
                 <canvas id="canvas"></canvas>
             </div>
         </div>
+        <span class="loader"></span>
 		<script src="$GODOT_URL"></script>
 		<script>
 			var engine = new Engine($GODOT_CONFIG);
@@ -23,8 +25,14 @@
                 background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
             }
 
+            .title {
+                font-size: 60px;
+                color: white;
+            }
+
             #outer-container {
                 display: flex;
+                flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 width: 100%;
@@ -45,7 +53,42 @@
                 display: block;
                 width: auto;
                 height: auto;
+                z-index: 2;
             }
+
+            .loader {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 48px;
+                height: 48px;
+                border: 3px solid #FFF;
+                border-radius: 50%;
+                display: inline-block;
+                box-sizing: border-box;
+                animation: rotation 1s linear infinite;
+            }
+            .loader::after {
+              content: '';  
+              box-sizing: border-box;
+              position: absolute;
+              left: 0;
+              top: 0;
+              background: #FF3D00;
+              width: 16px;
+              height: 16px;
+              transform: translate(-50%, 50%);
+              border-radius: 50%;
+            }
+
+            @keyframes rotation {
+              0% {
+                transform: rotate(0deg);
+              }
+              100% {
+                transform: rotate(360deg);
+              }
+            } 
         </style>
 	</body>
 </html>

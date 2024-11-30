@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dny7gpp3gr2ix"]
+[gd_scene load_steps=17 format=3 uid="uid://dny7gpp3gr2ix"]
 
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_o6qxd"]
 [ext_resource type="Script" path="res://Scripts/main_camera.gd" id="2_lyucm"]
@@ -10,7 +10,12 @@
 [ext_resource type="Texture2D" uid="uid://blxq65x27tuke" path="res://Assets/x-twitter-brands-solid.svg" id="8_42i6x"]
 [ext_resource type="Script" path="res://Scripts/leaderboard_search.gd" id="8_k5w7t"]
 [ext_resource type="Script" path="res://Scripts/twitter_button.gd" id="9_awwse"]
+[ext_resource type="Texture2D" uid="uid://ooh6xmg734gi" path="res://Assets/gitbook_logo_icon_168173.png" id="10_a05n4"]
 [ext_resource type="Script" path="res://Scripts/gnomes_count.gd" id="11_nxjjp"]
+[ext_resource type="Script" path="res://Scripts/gitbook_button.gd" id="11_um7jo"]
+[ext_resource type="Texture2D" uid="uid://bllcmcybfhk2r" path="res://Assets/Pump-Fun-Logo.png" id="12_old52"]
+[ext_resource type="Script" path="res://Scripts/pumpfun_button.gd" id="13_6r20n"]
+[ext_resource type="Script" path="res://Scripts/time_left.gd" id="16_2h1hi"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_o6qxd")
@@ -46,7 +51,7 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -384.0
+offset_left = -328.0
 grow_horizontal = 0
 grow_vertical = 2
 mouse_force_pass_scroll_events = false
@@ -82,7 +87,7 @@ layout_mode = 0
 offset_left = 7.0
 offset_top = 274.0
 offset_right = 320.0
-offset_bottom = 515.0
+offset_bottom = 856.0
 mouse_force_pass_scroll_events = false
 theme_override_font_sizes/font_size = 25
 allow_reselect = true
@@ -107,26 +112,52 @@ offset_top = 201.0
 offset_right = 320.0
 offset_bottom = 264.0
 theme_override_font_sizes/font_size = 25
-placeholder_text = "Gnome search..."
+placeholder_text = "Holder search..."
 script = ExtResource("8_k5w7t")
 
 [node name="twitter_button" type="Button" parent="GUI_Layer/GUI/leaderboard_panel"]
 layout_mode = 0
+offset_left = 7.0
 offset_top = 10.0
-offset_right = 73.0
+offset_right = 156.0
 offset_bottom = 83.0
 mouse_default_cursor_shape = 2
 icon = ExtResource("8_42i6x")
-flat = true
+icon_alignment = 1
 expand_icon = true
 script = ExtResource("9_awwse")
 
+[node name="gitbook_button" type="Button" parent="GUI_Layer/GUI/leaderboard_panel"]
+visible = false
+layout_mode = 0
+offset_left = 110.0
+offset_top = 10.0
+offset_right = 211.0
+offset_bottom = 83.0
+mouse_default_cursor_shape = 2
+icon = ExtResource("10_a05n4")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("11_um7jo")
+
+[node name="pumpfun_button" type="Button" parent="GUI_Layer/GUI/leaderboard_panel"]
+layout_mode = 0
+offset_left = 164.0
+offset_top = 10.0
+offset_right = 320.0
+offset_bottom = 83.0
+mouse_default_cursor_shape = 2
+icon = ExtResource("12_old52")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("13_6r20n")
+
 [node name="time" type="Label" parent="GUI_Layer/GUI/leaderboard_panel"]
 layout_mode = 0
-offset_left = 48.0
-offset_top = 620.0
-offset_right = 265.0
-offset_bottom = 676.0
+offset_left = 62.0
+offset_top = 993.0
+offset_right = 279.0
+offset_bottom = 1049.0
 theme_override_font_sizes/font_size = 40
 text = "05:00"
 horizontal_alignment = 1
@@ -140,7 +171,7 @@ offset_top = 154.0
 offset_right = 156.0
 offset_bottom = 203.0
 theme_override_font_sizes/font_size = 25
-text = "Gnomes:"
+text = "Miners:"
 
 [node name="gnomes_count" type="Label" parent="GUI_Layer/GUI/leaderboard_panel"]
 layout_mode = 0
@@ -154,12 +185,13 @@ script = ExtResource("11_nxjjp")
 
 [node name="time_left" type="Label" parent="GUI_Layer/GUI/leaderboard_panel"]
 layout_mode = 0
-offset_left = 64.0
-offset_top = 547.0
-offset_right = 255.0
-offset_bottom = 602.0
+offset_left = 78.0
+offset_top = 920.0
+offset_right = 269.0
+offset_bottom = 975.0
 theme_override_font_sizes/font_size = 40
 text = "Time Left:"
+script = ExtResource("16_2h1hi")
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 300.0

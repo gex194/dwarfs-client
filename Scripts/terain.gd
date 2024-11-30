@@ -37,7 +37,7 @@ func process_tile_change(chunk_size: int = 100):
 	var processed_count: int = 0
 	while processed_count < chunk_size && current_index < cells_data.size():
 		var cell = cells_data[current_index]
-		TerrainHelper.set_dirt_tile(cell, terrain_dirt)
+		TerrainHelper.set_dirt_tile(cell, terrain_dirt, rock_update_array)
 		current_index += 1
 		processed_count += 1
 	if (current_index >= cells_data.size()):

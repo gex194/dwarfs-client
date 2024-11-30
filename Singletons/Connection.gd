@@ -1,6 +1,7 @@
 extends Node
 
-@export var websocket_url = "ws://127.0.0.1:8000"
+@export var websocket_url = "wss://infinitemines.xyz/ws/"
+#@export var websocket_url = "ws://127.0.0.1:8000"
 var socket = WebSocketPeer.new()
 
 func _ready() -> void:
@@ -26,8 +27,9 @@ func _process(delta: float) -> void:
 				"gamePaused":
 					SignalBus.pause_game.emit(data)
 				"addDwarfs":
-					print(data)
 					SignalBus.add_dwarfs_data.emit(data)
+				"gameEndsIn":
+					SignalBus.game_ends_time.emit(data)
 	
 	elif state == WebSocketPeer.STATE_CLOSING:
 		pass
