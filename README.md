@@ -1,5 +1,5 @@
 # Dwarfs Idle Game
-Watch gnomes collect various ores and gaining points. Every run is randomized (even gnome movement).
+Watch gnomes collect various ores and gaining points. Every run is randomized (even gnome movement). This is the game-client only, the algorithms and movement logic is allocated on the serverside.
 
 Game was created using:
 - Godot Engine
